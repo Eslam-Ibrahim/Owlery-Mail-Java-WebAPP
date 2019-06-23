@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Owlery Mail-Sign-Up Page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="css/styleSignUp.css">
+        <script type="text/javascript">
+            function valdPass(form){
+                if(form.Password.value === form.confirmPassword.value){
+                    if (form.Password.value.length<8){
+                         alert("Error: Password must be at least 8 chars");
+                         form.Password.focus();
+                         return false;
+                    }
+                    re = /[0-9]/;
+                   if (!re.test(form.Password.value)){
+                   alert("Error: Password must be at least 1 number");
+                   form.password.focus();
+                   return false;
+                   }
+                   ch = /[A-Z]/;
+                   if (!ch.test(form.Password.value)){
+                   alert("Error: Password must be at least 1 Uppercase letter");
+                   form.Password.focus();
+                   return false;
+                   }
+                    chk = /[a-z]/;
+                   if (!chk.test(form.Password.value)){
+                   alert("Error: Password must be at least 1 Lowercase letter");
+                   form.Password.focus();
+                   return false;
+                   }
+                }else{
+                      // password is empty
+                      alert("Error: Password must not be empty and confirm password must be equal to password");
+                       form.Password.focus();
+                       form.confirmPassword.focus();
+                       return false;
+                }
+                    
+                   
+                }
+        function mailAjax()
+          {
+              var mailAd = document.getElementById("mailAddress").value;
+              if (mailAd===""){
+                  document.getElementById("show_result").innerHTML = "<p style=\"border-style:dashed;color: purple;\">\n" +
+"            Mail Address is empty\n" +
+"        </p>";
+              return;
+              }
+              mailAd+="@owlery.com";
+              var xmlhttp = new XMLHttpRequest();
+              xmlhttp.open("GET","AvlMailAjaxServlet?mailAddress="+mailAd,true);
+              xmlhttp.send();
+              xmlhttp.onreadystatechange = function()
+              {
+                  
+                  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                  {
+                  
+                      document.getElementById("show_result").innerHTML = xmlhttp.responseText;
+                  }
+              };
+          }
+               
+            
+        </script>
+    </head>
+    <body>
+        <h1 align="center" style="font-family:courier;color: gold">Sign-Up to Owlery Mail</h1>
+        
+          <form name="signUPForm" action="UserRegistServlet" method="post" onSubmit="return valdPass(signUPForm);">
+            
+              <fieldset>
+           <legend>Personal Information:</legend>
+           First Name:<input type="text" name="FName" required>
+            <br>
+            <br>
+            Last Name:<input type="text" name="LName" required>
+            <br>
+            <br>
+            Mail Address:<input type="text" name="mailAddress" id="mailAddress" required> @owlery.com<button type="button" onclick="mailAjax()">Check Availability!</button>
+            <br>
+            <div id="show_result"> </div>
+            Gender:
+            <br>
+            <input type="radio" name="gender" value="male" checked> Male
+            <br>
+            <input type="radio" name="gender" value="female"> Female
+            <br>
+            <br>
+            Date Of Birth:
+            <input type="date" name="dateOfBirth" required>
+            <br>
+            </fieldset>
+              <br>
+              <br>
+              <fieldset>
+               <legend>Password Settings:</legend>
+               <br>
+               <p style="border-style:solid;border-color: blue;">
+                Password Must Be:
+                <br>
+                -At least 8 chars 
+                <br>
+                -At least one uppercase letter 
+                <br>
+                -At least on lowercase letter 
+                <br>
+                -At least one number
+                <br>
+               </p>
+               <br>
+               Password:<input type="password" name="Password" required>
+               <br>
+               Confirm Password:<input type="password" name="confirmPassword" required>
+            </fieldset>
+              <br>
+              <center>
+                  <input type="submit" value="Sign-Up Now">
+              </center>
+        </form>
+
+        
+        
+    </body>
+</html>
